@@ -22,6 +22,6 @@ import java.lang.annotation.Target;
 @Component
 public @interface RpcService {
 
-    public String service(); // 实现的接口全名称
+    public String service(); // 瀹炵幇鐨勬帴鍙ｅ叏鍚嶇О
     public String version() default "1.0.0";
 }

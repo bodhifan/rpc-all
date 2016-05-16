@@ -8,7 +8,7 @@ import lombok.Data;
 public class Response
 {
 
-    /** 返回参数值 */
+    /** 返回参数 */
     Object value;
     boolean isSuccess;
 

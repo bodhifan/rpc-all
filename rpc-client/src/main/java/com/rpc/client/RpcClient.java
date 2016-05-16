@@ -32,7 +32,7 @@ public class RpcClient {
         this.port = port;
     }
 
-    /* ÓÃÓÚÍ¬²½ÏìÓ¦½á¹ûµÄmap, Ã¿´Î·¢ÆğÒ»´Îrpcµ÷ÓÃ£¬½«ÓÃfutureµÈ´ıÏìÓ¦½á¹û*/
+    /* ç”¨äºåŒæ­¥å“åº”ç»“æœçš„map, æ¯æ¬¡å‘èµ·ä¸€æ¬¡rpcè°ƒç”¨ï¼Œå°†ç”¨futureç­‰å¾…å“åº”ç»“æœ*/
     private final Map<String, RpcSynFuture<Response>> synResMap = new ConcurrentHashMap<String, RpcSynFuture<Response>>();
 
     public Response send(Request request) throws InterruptedException, ExecutionException {
@@ -65,12 +65,12 @@ public class RpcClient {
                 synResMap.put(request.getRequestId(),new RpcSynFuture<Response>());
                 response = synResMap.get(request.getRequestId()).get(3000, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
-                LOG.warn(String.format("[%s] µ÷ÓÃ³¬Ê± [%s]", request, 3000));
+                LOG.warn(String.format("[%s] è°ƒç”¨è¶…æ—¶ [%s]", request, 3000));
             }
 
             long endMills = System.currentTimeMillis();
 
-            LOG.debug(String.format("µ÷ÓÃÓÃÊ±: %d ºÁÃë",(endMills - startMills)));
+            LOG.debug(String.format("è°ƒç”¨ç”¨æ—¶: %d æ¯«ç§’",(endMills - startMills)));
             if (isClearup && synResMap.size() > 1024) {
                 isClearup = false;
                 clearSynResMap();
@@ -84,12 +84,12 @@ public class RpcClient {
         return response;
     }
 
-    /* É¾³ı¹ı¶àµÄkeys */
+    /* åˆ é™¤è¿‡å¤šçš„keys */
     volatile boolean isClearup = true;
 
 
     private void clearSynResMap() {
-        LOG.debug("ÇåÀírpcµ÷ÓÃfuture£¬¿ªÊ¼...");
+        LOG.debug("æ¸…ç†rpcè°ƒç”¨futureï¼Œå¼€å§‹...");
         new Thread(new Runnable() {
             public void run() {
                 for (String key : synResMap.keySet()) {
@@ -97,7 +97,7 @@ public class RpcClient {
                         synResMap.remove(key);
                 }
                 isClearup = true;
-                LOG.debug("ÇåÀírpcµ÷ÓÃfuture£¬Íê±Ï");
+                LOG.debug("æ¸…ç†rpcè°ƒç”¨futureï¼Œå®Œæ¯•");
             }
         }).start();
     }

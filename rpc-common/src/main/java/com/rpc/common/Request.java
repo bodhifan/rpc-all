@@ -13,12 +13,12 @@ public class Request
     private String method;
 
     /**
-     * ·½·¨Ìå²ÎÊıÁĞ±í
+     * æ–¹æ³•ä½“å‚æ•°åˆ—è¡¨
      */
     private Class<?>[] paramTypes;
 
     /**
-     * ²ÎÊıÖµ
+     * å‚æ•°å€¼
      */
     private Object[]  paramValues;
 

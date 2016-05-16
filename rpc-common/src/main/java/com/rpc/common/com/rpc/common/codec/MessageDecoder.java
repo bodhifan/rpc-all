@@ -26,20 +26,20 @@ public class MessageDecoder extends ByteToMessageDecoder
     protected void decode(ChannelHandlerContext ctx, ByteBuf in,
                           List<Object> out) throws Exception
     {
-        // ¶ÁÈ¡ËÄ¸ö×Ö½ÚµÄ³¤¶È
+        // è¯»å–å››ä¸ªå­—èŠ‚çš„é•¿åº¦
         if (in.readableBytes() < 4)
         {
-            LOG.debug("³¤¶ÈĞ¡ÓÚ4,·µ»Ø");
+            LOG.debug("é•¿åº¦å°äº4,è¿”å›");
             return;
         }
 
         in.markReaderIndex();
         int len = in.readInt();
 
-        // Èç¹ûµ±Ç°×Ö½ÚĞ¡ÓÚ len Ôò·µ»Ø¼ÌĞøµÈ´ı
+        // å¦‚æœå½“å‰å­—èŠ‚å°äº len åˆ™è¿”å›ç»§ç»­ç­‰å¾…
         if(in.readableBytes() < len)
         {
-            LOG.debug(String.format("Ã»ÓĞ×ã¹»³¤µÄ×Ö½Ú%d£¬µÈ´ıÏÂ´Î¶ÁÈ¡",len));
+            LOG.debug(String.format("æ²¡æœ‰è¶³å¤Ÿé•¿çš„å­—èŠ‚%dï¼Œç­‰å¾…ä¸‹æ¬¡è¯»å–",len));
             in.resetReaderIndex();
             return;
         }

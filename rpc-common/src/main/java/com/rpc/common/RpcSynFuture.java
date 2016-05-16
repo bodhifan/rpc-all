@@ -3,7 +3,7 @@ package com.rpc.common; /*
  *     TODO
  *
  * NOTES
- *    Í¬²½future£¬ÓÃÓÚÍ¬²½rpcµÄµ÷ÓÃ->½á¹û
+ *    åŒæ­¥futureï¼Œç”¨äºåŒæ­¥rpcçš„è°ƒç”¨->ç»“æœ
  *
  * MODIFIED    (MM/DD/YY)
  *   bofan     2016/5/16 - Creation
@@ -14,7 +14,7 @@ import java.util.concurrent.*;
 
 public class RpcSynFuture<T> implements Future<T>{
 
-    // Ò»´Î¼ÆÊı
+    // ä¸€æ¬¡è®¡æ•°
     CountDownLatch synFlag = new CountDownLatch(1);
 
     T value = null;
@@ -58,7 +58,7 @@ public class RpcSynFuture<T> implements Future<T>{
         return true;
     }
 
-    /* ÅĞ¶Ï¸ÃfutureÊÇ·ñÊ¹ÓÃ¹ı */
+    /* åˆ¤æ–­è¯¥futureæ˜¯å¦ä½¿ç”¨è¿‡ */
     public synchronized boolean isUsed()
     {
         return isUsed;
