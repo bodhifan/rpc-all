@@ -101,6 +101,12 @@
             <version>${version.spring}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${version.cglib}</version>
+        </dependency>
+
     </dependencies>
     <modules>
         <module>rpc-common</module>
