@@ -12,8 +12,13 @@
     <artifactId>client</artifactId>
     <dependencies>
         <dependency>
+        <groupId>com.rpc.bodhi.all</groupId>
+        <artifactId>rpc-common</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.rpc.bodhi.all</groupId>
-            <artifactId>rpc-common</artifactId>
+            <artifactId>rpc-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
