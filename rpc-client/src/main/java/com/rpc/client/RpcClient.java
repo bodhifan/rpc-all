@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -24,6 +25,10 @@ public class RpcClient {
 
     Logger LOG = LoggerFactory.getLogger(RpcClient.class);
 
+    /**
+     * client 执行在线程池中,不然会引起outofmemory
+     */
+    static  Executor executor = Executors.newFixedThreadPool(3);
     private String host;
     private int port;
 
@@ -33,12 +38,12 @@ public class RpcClient {
     }
 
     /* 用于同步响应结果的map, 每次发起一次rpc调用，将用future等待响应结果*/
-    private final Map<String, RpcSynFuture<Response>> synResMap = new ConcurrentHashMap<String, RpcSynFuture<Response>>();
+    private final Map<String, RpcSynFuture<Response>> synResMap = new HashMap<String, RpcSynFuture<Response>>();
 
     public Response send(Request request) throws InterruptedException, ExecutionException {
 
 
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup(0,executor);
         Response response = null;
         try {
             Bootstrap b = new Bootstrap();
@@ -60,10 +65,11 @@ public class RpcClient {
 
 
             long startMills = System.currentTimeMillis();
+            synResMap.put(request.getRequestId(),new RpcSynFuture<Response>());
             ChannelFuture future = f.channel().writeAndFlush(request).sync();
             try {
-                synResMap.put(request.getRequestId(),new RpcSynFuture<Response>());
-                response = synResMap.get(request.getRequestId()).get(3000, TimeUnit.MILLISECONDS);
+                response = synResMap.get(request.getRequestId()).get(3000, TimeUnit.MINUTES);
+
             } catch (TimeoutException e) {
                 LOG.warn(String.format("[%s] 调用超时 [%s]", request, 3000));
             }
@@ -77,8 +83,13 @@ public class RpcClient {
             }
             // Wait until the connection is closed.
             f.channel().close().sync();
+
         } finally {
-            workerGroup.shutdownGracefully();
+
+            /**
+             * 对于同步的请求,需要立即关闭
+             */
+            workerGroup.shutdownGracefully(0, 0, TimeUnit.MILLISECONDS);
         }
 
         return response;
@@ -100,13 +111,5 @@ public class RpcClient {
                 LOG.debug("清理rpc调用future，完毕");
             }
         }).start();
-    }
-
-    public static void main(String[] args) throws Exception {
-        RpcClient server = new RpcClient("127.0.0.1", 8080);
-        //server.run();
-
-        // System.out.println( Thread.currentThread().getContextClassLoader().getResource("log4j.properties").getFile());
-
     }
 }

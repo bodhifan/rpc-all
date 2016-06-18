@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.rpc.server.services">
+    <context:component-scan base-package="com.rpc.services">
         <context:include-filter type="annotation" expression="com.rpc.server.services.RpcService"></context:include-filter>
     </context:component-scan>
     <bean id="rpcServer" class="com.rpc.server.RpcServer">

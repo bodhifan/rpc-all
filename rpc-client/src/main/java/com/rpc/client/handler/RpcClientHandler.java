@@ -16,6 +16,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RpcClientHandler extends SimpleChannelInboundHandler<Response> {
 
@@ -24,12 +25,13 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<Response> {
     {
         synResMap = futureMap;
     }
-    protected void channelRead0(ChannelHandlerContext ctx, Response response) throws Exception {
 
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, Response response) throws Exception {
         String reqId = response.getRequestId();
         if(synResMap.containsKey(reqId))
         {
-            synResMap.get(reqId).hasDone(response);
+            RpcSynFuture<Response> future = synResMap.get(reqId);
+            future.hasDone(response);
         }
     }
 }

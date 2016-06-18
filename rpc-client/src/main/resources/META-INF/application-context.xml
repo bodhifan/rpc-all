@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rpc-services="http://www.rpc.com/schema/services"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.rpc.com/schema/services http://www.rpc.com/schema/services-schema.xsd">
+
+    <rpc-services:rpc-consumer id="consumer1" interface-name="com.rpc.common.demo.service.HelloService" version="1.0.0"></rpc-services:rpc-consumer>
+
+</beans>

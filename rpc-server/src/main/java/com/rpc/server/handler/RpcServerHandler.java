@@ -1,22 +1,19 @@
-package com.rpc.server.com.rpc.server.handler;
+package com.rpc.server.handler;
 
 import com.rpc.common.Request;
 import com.rpc.common.Response;
-import com.rpc.server.RpcServer;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by bodhi on 2016/5/13.
  */
-public class RpcServerHandler extends SimpleChannelInboundHandler<Request> { // (1)
+public class RpcServerHandler extends SimpleChannelInboundHandler<Request> {
 
     Logger LOG = LoggerFactory.getLogger(RpcServerHandler.class);
 
@@ -27,33 +24,6 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<Request> { // 
         serviceMaps = services;
     }
 
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Request request)
-            throws Exception
-    {
-        LOG.debug("receive call request: %s",request.toString());
-        System.out.println(request.toString());
-        Response response = new Response();
-        response.setRequestId(request.getRequestId());
-        try
-        {
-            // 假装超时
-//            int mills = new Random().nextInt(3);
-//            if (mills%2==0)
-//                Thread.sleep(mills*1000);
-            response.setValue(invokeMethod(request));
-            response.setSuccess(true);
-        }
-        catch (Exception e)
-        {
-            response.setSuccess(false);
-            response.setExceptionMsg(e.getMessage());
-            response.setValue(null);
-        }
-
-        /* 返回结果给客户端 */
-        ctx.writeAndFlush(response).sync();
-    }
 
     /* 处理远程调用请求 */
     public Object invokeMethod(Request request) throws Exception {
@@ -126,5 +96,31 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<Request> { // 
         // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
+    }
+
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, Request request) throws Exception {
+        LOG.debug(String.format("receive call request: %s",request.toString()));
+        Response response = new Response();
+        response.setRequestId(request.getRequestId());
+        try
+        {
+            // 假装超时
+//            int mills = new Random().nextInt(3);
+//            if (mills%2==0)
+//                Thread.sleep(mills*1000);
+            response.setValue(invokeMethod(request));
+            response.setSuccess(true);
+        }
+        catch (Exception e)
+        {
+            response.setSuccess(false);
+            response.setExceptionMsg(e.getMessage());
+            response.setValue(null);
+        }
+
+        LOG.debug(String.format("response: %s",response.toString()));
+
+        /* 返回结果给客户端 */
+        channelHandlerContext.writeAndFlush(response).sync();
     }
 }

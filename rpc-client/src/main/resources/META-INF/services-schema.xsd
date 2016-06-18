@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.rpc.com/schema/services"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://www.rpc.com/schema/services"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+
+    <!-- rpc 的调用方 -->
+    <xsd:element name="rpc-consumer">
+        <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:ID"/>
+                    <xsd:attribute name="interface-name" type="xsd:string"/>
+                    <xsd:attribute name="version" type="xsd:string" />
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

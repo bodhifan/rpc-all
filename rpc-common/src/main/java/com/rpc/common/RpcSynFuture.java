@@ -27,24 +27,24 @@ public class RpcSynFuture<T> implements Future<T>{
         return true;
     }
 
-    public boolean isCancelled() {
+    public synchronized boolean isCancelled() {
 
         if (isCanceled == true && synFlag.getCount() == 0) return true;
         return false;
     }
 
-    public boolean isDone() {
+    public synchronized boolean isDone() {
         if (isCanceled == false && synFlag.getCount() == 0) return true;
         return  false;
     }
 
-    public T get() throws InterruptedException, ExecutionException {
+    public synchronized T get() throws InterruptedException, ExecutionException {
         synFlag.await();
         isUsed = true;
         return  value;
     }
 
-    public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public synchronized T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         isUsed = true;
         boolean flag = synFlag.await(timeout,unit);
         if (!flag) throw new TimeoutException();
@@ -53,6 +53,7 @@ public class RpcSynFuture<T> implements Future<T>{
 
     public boolean hasDone(T val)
     {
+        System.err.println("has down");
         value = val;
         synFlag.countDown();
         return true;

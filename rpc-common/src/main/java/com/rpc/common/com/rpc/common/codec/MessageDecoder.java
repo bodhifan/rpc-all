@@ -49,6 +49,7 @@ public class MessageDecoder extends ByteToMessageDecoder
 
         Object request = SerializtionIOUtils.deserialize(message, genericClass);
         out.add(request);
+
     }
 
 }

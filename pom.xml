@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.slf4j>1.7.10</version.slf4j>
         <version.spring>4.1.5.RELEASE</version.spring>
-        <version.netty>4.0.36.Final</version.netty>
+        <version.netty>5.0.0.Alpha2</version.netty>
         <version.protostuff>1.0.9</version.protostuff>
         <version.objenesis>2.1</version.objenesis>
         <version.cglib>3.1</version.cglib>
@@ -48,11 +48,13 @@
         </plugins>
     </build>
     <dependencies>
+        <!-- http://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>${version.netty}</version>
+            <version>5.0.0.Alpha2</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -112,6 +114,9 @@
         <module>rpc-common</module>
         <module>rpc-client</module>
         <module>rpc-server</module>
+        <module>sever-sample</module>
+        <module>client-sample</module>
+        <module>sample</module>
     </modules>
 
 </project>

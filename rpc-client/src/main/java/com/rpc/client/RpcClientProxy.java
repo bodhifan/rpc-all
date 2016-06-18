@@ -21,15 +21,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RpcClientProxy implements MethodInterceptor {
 
     Logger LOG = LoggerFactory.getLogger(RpcClientProxy.class);
 
     private Class<?> interfaze;
+    static Map<String,String> versionMaps = new ConcurrentHashMap<String, String>();
     @SuppressWarnings("unchecked")
-    public Object proxyTarget(Class<?> clazz) {
+    public Object proxyTarget(Class<?> clazz,String version) {
 
+        versionMaps.put(clazz.getCanonicalName(),version);
         this.interfaze = clazz;
         Enhancer en = new Enhancer();
         en.setInterfaces(new Class[]{clazz});
@@ -42,7 +46,7 @@ public class RpcClientProxy implements MethodInterceptor {
         Request req = new Request();
         req.setRequestId(System.currentTimeMillis()+"");
         req.setInterfaceName(o.getClass().getInterfaces()[0].getCanonicalName());
-        req.setVersion("1.0.0");
+        req.setVersion(versionMaps.get(o.getClass().getInterfaces()[0].getCanonicalName()));
         req.setMethod(method.getName());
         req.setParamTypes(method.getParameterTypes());
         req.setParamValues(objects);
@@ -52,14 +56,5 @@ public class RpcClientProxy implements MethodInterceptor {
         Response response = client.send(req);
 
         return  response.getValue();
-    }
-
-    @Test
-    public void testProxy()
-    {
-
-        HelloService service = (HelloService) new RpcClientProxy().proxyTarget(HelloService.class);
-        String msg = service.getSayHello(111,"hi");
-        System.out.println(msg);
     }
 }

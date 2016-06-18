@@ -4,7 +4,7 @@ import com.rpc.common.Request;
 import com.rpc.common.Response;
 import com.rpc.common.com.rpc.common.codec.MessageDecoder;
 import com.rpc.common.com.rpc.common.codec.MessageEncoder;
-import com.rpc.server.com.rpc.server.handler.RpcServerHandler;
+import com.rpc.server.handler.RpcServerHandler;
 import com.rpc.server.services.RpcService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
